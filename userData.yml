@@ -1,5 +1,8 @@
 #cloud-config
 # spam4kev@gmail.com 2/6/16
+# -This config expects the mesos cluster hosts to be named mesos-1, mesos-2,
+# mesos-3, ..., and will set mesos-1 to be the master
+# -It assumes your master will have the public ip 10.11.11.156 associated. Find the IP below and change it with your public IP (EIP) 
 yum_repos:
    WANdiscoSVN:
       baseurl: http://opensource.wandisco.com/centos/7/svn-1.9/RPMS/$basearch/
@@ -23,6 +26,11 @@ runcmd:
  - dhclient
  - yum update -y
  - yum install -y tar wget which
+ - eth0_ip=$(curl -s http://169.254.169.254/latest/meta-data/local-ipv4/)
+ - echo "$eth0_ip $hostname" >> /etc/hosts
+ - echo "10.11.11.156 mesos-master" >> /etc/hosts
+ - firewall-cmd --add-port=5050/tcp
+ - systemctl restart firewalld.service
  - wget http://www.apache.org/dist/mesos/0.27.0/mesos-0.27.0.tar.gz
  - tar -zxf mesos-0.27.0.tar.gz
  - wget http://repos.fedorapeople.org/repos/dchen/apache-maven/epel-apache-maven.repo -O /etc/yum.repos.d/epel-apache-maven.repo 
@@ -37,3 +45,5 @@ runcmd:
  - ../configure
  - make
  - make check
+ - [[ $(hostname -s) == "mesos-1" ]] && ./bin/mesos-master.sh --ip=$eth0_ip --work_dir=/var/lib/mesos
+ - ./bin/mesos-slave.sh --master=mesos-master:5050
