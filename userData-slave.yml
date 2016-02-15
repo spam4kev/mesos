@@ -27,6 +27,7 @@ runcmd:
  - echo "$eth0_ip $hostname" >> /etc/hosts
  - echo "10.11.11.156 mesos-1" >> /etc/hosts
  - firewall-cmd --add-port=5050/tcp
+ - systemctl restart firewalld.service
  - wget http://www.apache.org/dist/mesos/0.27.0/mesos-0.27.0.tar.gz
  - tar -zxf mesos-0.27.0.tar.gz
  - wget http://repos.fedorapeople.org/repos/dchen/apache-maven/epel-apache-maven.repo -O /etc/yum.repos.d/epel-apache-maven.repo 
