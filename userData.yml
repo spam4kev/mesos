@@ -10,7 +10,7 @@ yum_repos:
 
 users:
   - default
-  - name: fitzhenk
+  - name: spam4kev
     gecos: kev
     sudo: ALL=(ALL) NOPASSWD:ALL
     groups: users
