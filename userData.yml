@@ -29,8 +29,7 @@ runcmd:
  - eth0_ip=$(curl -s http://169.254.169.254/latest/meta-data/local-ipv4/)
  - echo "$eth0_ip $hostname" >> /etc/hosts
  - echo "10.11.11.156 mesos-master" >> /etc/hosts
- - firewall-cmd --add-port=5050/tcp
- - systemctl restart firewalld.service
+ - firewall-offline-cmd --add-port=5050/tcp
  - wget http://www.apache.org/dist/mesos/0.27.0/mesos-0.27.0.tar.gz
  - tar -zxf mesos-0.27.0.tar.gz
  - wget http://repos.fedorapeople.org/repos/dchen/apache-maven/epel-apache-maven.repo -O /etc/yum.repos.d/epel-apache-maven.repo 
@@ -45,5 +44,5 @@ runcmd:
  - ../configure
  - make
  - make check
- - [[ $(hostname -s) == "mesos-1" ]] && ./bin/mesos-master.sh --ip=$eth0_ip --work_dir=/var/lib/mesos
+# - ./bin/mesos-master.sh --ip=$eth0_ip --work_dir=/var/lib/mesos
  - ./bin/mesos-slave.sh --master=mesos-master:5050
