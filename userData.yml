@@ -44,6 +44,6 @@ runcmd:
  - ../configure
  - make
  - make check
- - wget https://raw.githubusercontent.com/spam4kev/mesos/master/startup.sh -o startup.sh
+ - wget https://raw.githubusercontent.com/spam4kev/mesos/master/startup.sh -O startup.sh
  - ./startup.sh
  - ./bin/mesos-slave.sh --master=mesos-master:5050
