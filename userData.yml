@@ -44,6 +44,6 @@ runcmd:
  - ../configure
  - make
  - make check
- - wget 
-# - ./bin/mesos-master.sh --ip=$eth0_ip --work_dir=/var/lib/mesos
+ - wget https://raw.githubusercontent.com/spam4kev/mesos/master/startup.sh -o startup.sh
  - ./bin/mesos-slave.sh --master=mesos-master:5050
+ - ./startup.sh
