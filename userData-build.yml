@@ -3,6 +3,13 @@
 # -This config expects the mesos cluster hosts to be named mesos-1, mesos-2,
 # mesos-3, ..., and will set mesos-1 to be the master
 # -It assumes your master will have the public ip 10.11.11.156 associated. Find the IP below and change it with your public IP (EIP) 
+yum_repos:
+   WANdiscoSVN:
+      baseurl: http://opensource.wandisco.com/centos/7/svn-1.9/RPMS/$basearch/
+      enabled: true
+      gpgcheck: true
+      gpgkey: http://opensource.wandisco.com/RPM-GPG-KEY-WANdisco
+      name: WANdisco SVN Repo 1.9
 
 users:
   - default
@@ -18,11 +25,24 @@ users:
 runcmd:
  - dhclient
  - yum update -y
- - rpm -Uvh http://repos.mesosphere.com/el/7/noarch/RPMS/mesosphere-el-repo-7-1.noarch.rpm
+ - yum install -y tar wget which
  - eth0_ip=$(curl -s http://169.254.169.254/latest/meta-data/local-ipv4/)
  - echo "$eth0_ip $(hostname)" >> /etc/hosts
  - echo "10.11.11.156 mesos-master" >> /etc/hosts
- - yum -y install mesos marathon mesosphere-zookeeper
  - firewall-offline-cmd --add-port=5050/tcp
+ - wget http://www.apache.org/dist/mesos/0.27.0/mesos-0.27.0.tar.gz
+ - tar -zxf mesos-0.27.0.tar.gz
+ - wget http://repos.fedorapeople.org/repos/dchen/apache-maven/epel-apache-maven.repo -O /etc/yum.repos.d/epel-apache-maven.repo 
  - yum install -y epel-release
+ - yum update systemd
+ - yum groupinstall -y "Development Tools"
+ - yum install -y apache-maven python-devel java-1.8.0-openjdk-devel zlib-devel libcurl-devel openssl-devel cyrus-sasl-devel cyrus-sasl-md5 apr-devel subversion-devel apr-util-devel
+ - cd mesos-*
+ - ./bootstrap
+ - mkdir build
+ - cd build
+ - ../configure
+ - make
+ - make check
  - wget https://raw.githubusercontent.com/spam4kev/mesos/master/startup.sh -O startup.sh
+ - ./startup.sh
