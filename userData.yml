@@ -25,4 +25,4 @@ runcmd:
  - yum -y install mesos marathon mesosphere-zookeeper
  - firewall-offline-cmd --add-port=5050/tcp
  - yum install -y epel-release
- - wget https://raw.githubusercontent.com/spam4kev/mesos/master/startup.sh -O startup.sh
+ - curl https://raw.githubusercontent.com/spam4kev/mesos/master/startup.sh -o startup.sh
