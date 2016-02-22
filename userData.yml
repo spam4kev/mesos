@@ -23,6 +23,7 @@ runcmd:
  - echo "$eth0_ip $(hostname)" >> /etc/hosts
  - echo "10.11.11.156 mesos-master" >> /etc/hosts
  - yum -y install http://downloads.mesosphere.io/master/centos/7/mesos-0.27.0-0.2.190.centos701406.x86_64.rpm marathon mesosphere-zookeeper
+ - echo "$(hostname).1=$(curl -s http://169.254.169.254/latest/meta-data/local-ipv4/):2888:3888" >> /etc/zookeeper/conf/zoo.cfg
  - firewall-offline-cmd --add-port=5050/tcp
 # - yum install -y epel-release
  - curl https://raw.githubusercontent.com/spam4kev/mesos/master/startup.sh -o startup.sh
